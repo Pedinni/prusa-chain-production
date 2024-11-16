@@ -36,6 +36,13 @@ AccelStepper stepperM2 = AccelStepper(AccelStepper::DRIVER, PIN_M2_STEP, PIN_M2_
 #define PIN_LED 18
 #define PIN_FAN 19
 
+// Prusa GPIO-Board pins
+#define PIN_PRUSA_FAN 20
+#define PIN_PRUSA_EJECT 21
+
+int prusa_eject_input = 1;
+int last_prusa_eject_input = 1;
+
 // Config
 #define MICROSTEP 4
 #define MAX_MOVING_TIME 10 // s
@@ -61,10 +68,8 @@ void setup() {
   pinMode(PIN_FAN, OUTPUT);
   pinMode(PIN_M1_CS, OUTPUT);
   pinMode(PIN_M2_CS, OUTPUT);
-
-  while (!Serial) {
-    ; // wait for serial port to connect. Needed for native USB
-  }
+  pinMode(PIN_PRUSA_FAN, INPUT_PULLUP);
+  pinMode(PIN_PRUSA_EJECT, INPUT_PULLUP);
 
   // Test relays
   digitalWrite(PIN_FAN, HIGH); 
@@ -274,5 +279,19 @@ void loop() {
       case CMD_UNKNOWN:
         Serial.println("UNKNOWN COMMAND");
     }
+  }
+
+  prusa_eject_input = digitalRead(PIN_PRUSA_EJECT);
+  if (prusa_eject_input == 0 & last_prusa_eject_input == 1){
+    Serial.println("START");
+    eject();
+    Serial.println("END");
+  }
+  last_prusa_eject_input = prusa_eject_input;
+
+  if (digitalRead(PIN_PRUSA_FAN) == 0){
+    digitalWrite(PIN_FAN, HIGH);
+  } else {
+    digitalWrite(PIN_FAN, LOW);
   }
 }
