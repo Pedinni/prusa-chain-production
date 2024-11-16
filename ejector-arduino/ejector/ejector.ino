@@ -44,7 +44,7 @@ AccelStepper stepperM2 = AccelStepper(AccelStepper::DRIVER, PIN_M2_STEP, PIN_M2_
 #define STALL_VALUE 6
 #define MAX_STALL 100
 
-int maxPos = 280;
+int maxPos = 273;
 long mm2Step(long distance) {
   return  distance * STEPS_PER_MM * MICROSTEP;
 }
@@ -210,7 +210,7 @@ void eject() {
   stepperM2.enableOutputs();
 
   // Deploy arm
-  int pos = moveTo(70, 100);
+  int pos = moveTo(40, 100);
   int i = 0;
   int speeds[] = {600, 500, 400, 300, 200};
 
@@ -219,10 +219,6 @@ void eject() {
     stepperM2.move(0);
     stepperM1.setSpeed(0);
     stepperM2.setSpeed(0);
-
-    delay(500);
-    moveTo(70, 500);
-    delay(500);
 
     pos = moveTo(maxPos, speeds[i]);
     i++;
