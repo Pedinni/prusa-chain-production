@@ -37,8 +37,8 @@ AccelStepper stepperM2 = AccelStepper(AccelStepper::DRIVER, PIN_M2_STEP, PIN_M2_
 #define PIN_FAN 19
 
 // Prusa GPIO-Board pins
-#define PIN_PRUSA_FAN 20
-#define PIN_PRUSA_EJECT 21
+#define PIN_PRUSA_FAN 16
+#define PIN_PRUSA_EJECT 17
 
 int prusa_eject_input = 1;
 int last_prusa_eject_input = 1;
