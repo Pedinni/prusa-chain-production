@@ -36,6 +36,8 @@ AccelStepper stepperM2 = AccelStepper(AccelStepper::DRIVER, PIN_M2_STEP, PIN_M2_
 #define PIN_LED 18
 #define PIN_FAN 19
 
+bool fan_override = false;
+
 // Prusa GPIO-Board pins
 #define PIN_PRUSA_FAN 16
 #define PIN_PRUSA_EJECT 17
@@ -260,11 +262,11 @@ void loop() {
         Serial.println("END");
         break;
       case CMD_FAN_ON:
-        digitalWrite(PIN_FAN, HIGH); 
+        fan_override = true;
         Serial.println("DONE");
         break;
       case CMD_FAN_OFF:
-        digitalWrite(PIN_FAN, LOW); 
+        fan_override = false;
         Serial.println("DONE");
         break;
       case CMD_LED_ON:
@@ -289,7 +291,7 @@ void loop() {
   }
   last_prusa_eject_input = prusa_eject_input;
 
-  if (digitalRead(PIN_PRUSA_FAN) == 0){
+  if (digitalRead(PIN_PRUSA_FAN) == 0 || fan_override == true){
     digitalWrite(PIN_FAN, HIGH);
   } else {
     digitalWrite(PIN_FAN, LOW);
